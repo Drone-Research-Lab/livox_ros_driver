@@ -2,10 +2,11 @@
 This package allow you to connect to the livox-mid-40 with ROS Melodic on Windows like you would with the [ubuntu version of this package](https://github.com/Livox-SDK/livox_ros_driver).
 
 **Disclimber this package have only been tested on ros melodic isntalled on windows 10 and the livox-mid-40. The livox hub have not been tested.**
-There is alot more steps to install everything for Windows than ubuntu. But if you want to make the livox laser scanner work on windows this is a package that could help you.
+
+There are a lot more steps to install everything for Windows than ubuntu. But if you want to make the livox laser scanner work on windows this is a package that could help you.
 
 Also inorder for me to make this package to work on Windows, I had to remove the GPS sync from the package since the USB com ports libaries are very different from windows to linux.
-So if anybody wants to contiue on making that work on windows, be welcome to fix that problem in this windows version of the Livox_ros_driver. I will not contiue working on this package since i got it to work for my porpose i need the driver for.
+So if anybody wants to contiue on making that work on windows, be welcome to fix that problem in this windows version of the Livox_ros_driver. I will not contiue working on this package since i got the ubuntu version to work on my windows computer for my porpose i need the driver for.
 
 ## 1. Install dependencies
 
@@ -19,19 +20,22 @@ For ROS installation, please refer to the ROS installation for Windows guide :
 
 &ensp;&ensp;&ensp;&ensp;***Note :***
 
-&ensp;&ensp;&ensp;&ensp;(1) Be sure to install the full version of ROS (ros-Mḿelodic-desktop-full);
+&ensp;&ensp;&ensp;&ensp;(1) Be sure to install the full version of ROS (ros-melodic-desktop-full);
 
 &ensp;&ensp;&ensp;&ensp;(2) There are 7 to 8 steps in ROS installation, please read the installation guide in detail;
 
 ### 1.1 PCL and VTK installation
-Usually VTK install with ROS on ubuntu. but thats not the case on Windows so we need to install it.
+Usually VTK is install with ROS on ubuntu. but thats not the case on Windows so we need to install it.
 
 I found the best way of installing the VTK with the vcpkg package manager. which can be install from [here](https://github.com/microsoft/vcpkg).
 
 The VTK package will be install alongside PCL by follow the guide on [pcl website](https://pointclouds.org/downloads/) on how to install it for windows.
+
 **Remember to isntall the PCL with 64 bit support:** 
+
 　
-　`.\vcpkg install pcl --triplet x64-windows`
+　```.\vcpkg install pcl --triplet x64-windows```
+
 
 This part might take a while since VTK is a quit a big package.
 
