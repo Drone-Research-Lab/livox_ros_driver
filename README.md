@@ -8,6 +8,8 @@ There are a lot more steps to install everything for Windows than ubuntu. But if
 Also inorder for me to make this package to work on Windows, I had to remove the GPS sync from the package since the USB com ports libaries are very different from windows to linux.
 So if anybody wants to contiue on making that work on windows, be welcome to fix that problem in this windows version of the Livox_ros_driver. I will not contiue working on this package since i got the ubuntu version to work on my windows computer for my porpose i need the driver for.
 
+Sorry for the bad english aswell as the bad formatted readme.
+
 ## 1. Install dependencies
 
 Before running livox_ros_driver, ROS, Livox-SDK and PCL must be installed.
@@ -37,13 +39,12 @@ The VTK package will be install alongside PCL by follow the guide on [pcl websit
 　```.\vcpkg install pcl --triplet x64-windows```
 
 
-This part might take a while since VTK is a quit a big package.
-
-Once it is isntall we can contiue with isntall the Livox SDK
+This part might take a while since VTK is a quit a big package. Once it is isntall we can contiue with isntall the Livox SDK
 
 
 ### 1.2 Livox-SDK Installation
-If you install the the Livox-SDK into your src folder in your catkin workspace is the best, like shown in the figure below:
+Install the Livox-SDK into your src folder in your catkin workspace is the best, like shown in the figure below:
+
 ```
 src
     └── livox_ros_driver
@@ -51,7 +52,8 @@ src
 ```
 
 **Make sure that you install the Livox-SDK with 64-bit support**
-1. Download or clone [Livox-SDK](https://github.com/Livox-SDK/Livox-SDK) from Github to local;
+
+Download or clone [Livox-SDK](https://github.com/Livox-SDK/Livox-SDK) from Github to local;
 
 Building the Livox-SDK on windows can be a bit tricky so here is a short guide to how i did it:
 
@@ -72,12 +74,12 @@ Once this step is done there should be a visual studio solution which you can op
 Inside the visual studio solution put the build to Release and build ALL.
 
 Once this step is done you should have built the Livox SDK.
-Now we just have to link it to the ros package.
+Now we just have to link the SDK to the ros package.
 
 ## 2. Get and build livox_ros_driver
 
 
-1. Get livox_ros_driver from GitHub :
+Get livox_ros_driver from GitHub :
 
 ```
 cd to_your_catkin_worksapce_folder/src
@@ -104,7 +106,7 @@ gedit src/livox_ros_driver/CMakeLists.txt
 ```
 Once everything is build with catkin we need to source the workspace with. Use the following command to update the current ROS package environment :
 
-`source ./devel/setup.sh`
+`source /devel/setup.sh`
 
 
 ## 3. Run livox_ros_driver
