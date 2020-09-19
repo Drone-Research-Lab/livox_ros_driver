@@ -32,9 +32,9 @@
 #include <mutex>
 
 #include "lds.h"
-#include "livox_sdk.h"
+#include "C:\Users\VTC1911-IPK\Documents\workspaces\livox_ws\ws_livox\src\Livox-SDK\sdk_core\include\livox_sdk.h"
 #include "rapidjson/document.h"
-#include "timesync.h"
+
 
 namespace livox_ros {
 
@@ -98,7 +98,7 @@ private:
   void EnableAutoConnectMode(void) { auto_connect_mode_ = true; }
   void DisableAutoConnectMode(void) { auto_connect_mode_ = false; }
   bool IsAutoConnectMode(void) { return auto_connect_mode_; }
-  int ParseTimesyncConfig(rapidjson::Document &doc);
+
   int ParseConfigFile(const char *pathname);
   int AddRawUserConfig(UserRawConfig &config);
   bool IsExistInRawConfig(const char *broadcast_code);
@@ -110,9 +110,6 @@ private:
   char broadcast_code_whitelist_[kMaxLidarCount][kBroadcastCodeSize];
   std::vector<UserRawConfig> raw_config_;
 
-  bool enable_timesync_;
-  TimeSync *timesync_;
-  TimeSyncConfig timesync_config_;
   std::mutex config_mutex_;
 };
 

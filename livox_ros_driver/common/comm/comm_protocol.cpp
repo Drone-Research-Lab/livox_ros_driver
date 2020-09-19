@@ -36,13 +36,10 @@ CommProtocol::CommProtocol(ProtocolConfig &config) : config_(config) {
   offset_to_read_index_ = 0;
   packet_length_ = 0;
 
-  if (kGps == config.type) {
-    is_length_known = false;
-    protocol_ = new GpsProtocol();
-  } else {
-    is_length_known = true;
-    protocol_ = nullptr;
-  }
+
+  is_length_known = true;
+  protocol_ = nullptr;
+
 }
 
 CommProtocol::~CommProtocol() {

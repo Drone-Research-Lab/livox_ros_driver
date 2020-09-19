@@ -30,6 +30,8 @@
 #include <string.h>
 #include <time.h>
 
+#define timegm _mkgmtime
+
 namespace livox_ros {
 
 /** Common function ------

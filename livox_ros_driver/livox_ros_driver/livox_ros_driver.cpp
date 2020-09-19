@@ -31,7 +31,7 @@
 #include "lds_hub.h"
 #include "lds_lidar.h"
 #include "lds_lvx.h"
-#include "livox_sdk.h"
+#include "C:\Users\VTC1911-IPK\Documents\workspaces\livox_ws\ws_livox\src\Livox-SDK\sdk_core\include\livox_sdk.h"
 #include <ros/ros.h>
 
 using namespace livox_ros;

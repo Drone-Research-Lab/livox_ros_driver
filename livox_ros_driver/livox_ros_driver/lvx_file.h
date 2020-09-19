@@ -24,7 +24,7 @@
 #ifndef LIVOX_FILE_H_
 #define LIVOX_FILE_H_
 
-#include "livox_sdk.h"
+#include "C:\Users\VTC1911-IPK\Documents\workspaces\livox_ws\ws_livox\src\Livox-SDK\sdk_core\include\livox_sdk.h"
 #include <fstream>
 #include <ios>
 #include <list>

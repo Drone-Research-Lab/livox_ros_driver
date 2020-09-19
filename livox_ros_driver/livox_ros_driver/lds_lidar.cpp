@@ -105,20 +105,6 @@ int LdsLidar::InitLdsLidar(std::vector<std::string> &broadcast_code_strs,
            "connection mode!\n");
   }
 
-  if (enable_timesync_) {
-    timesync_ = TimeSync::GetInstance();
-    if (timesync_->InitTimeSync(timesync_config_)) {
-      printf("Timesync init fail\n");
-      return -1;
-    }
-
-    if (timesync_->SetReceiveSyncTimeCb(ReceiveSyncTimeCallback, this)) {
-      printf("Set Timesync callback fail\n");
-      return -1;
-    }
-
-    timesync_->StartTimesync();
-  }
 
   /** Start livox sdk to receive lidar data */
   if (!Start()) {
@@ -146,10 +132,6 @@ int LdsLidar::DeInitLdsLidar(void) {
 
   Uninit();
   printf("Livox SDK Deinit completely!\n");
-
-  if (timesync_) {
-    timesync_->DeInitTimeSync();
-  }
 
   return 0;
 }
@@ -662,60 +644,7 @@ bool LdsLidar::IsBroadcastCodeExistInWhitelist(const char *broadcast_code) {
   return false;
 }
 
-int LdsLidar::ParseTimesyncConfig(rapidjson::Document &doc) {
-  do {
-    if (!doc.HasMember("timesync_config") || !doc["timesync_config"].IsObject())
-      break;
 
-    const rapidjson::Value &object = doc["timesync_config"];
-    if (!object.IsObject())
-      break;
-
-    if (!object.HasMember("enable_timesync") ||
-        !object["enable_timesync"].IsBool())
-      break;
-    enable_timesync_ = object["enable_timesync"].GetBool();
-
-    if (!object.HasMember("device_name") || !object["device_name"].IsString())
-      break;
-    std::string device_name = object["device_name"].GetString();
-    std::strncpy(timesync_config_.dev_config.name, device_name.c_str(),
-                 sizeof(timesync_config_.dev_config.name));
-
-    if (!object.HasMember("comm_device_type") ||
-        !object["comm_device_type"].IsInt())
-      break;
-    timesync_config_.dev_config.type = object["comm_device_type"].GetInt();
-
-    if (timesync_config_.dev_config.type == kCommDevUart) {
-      if (!object.HasMember("baudrate_index") ||
-          !object["baudrate_index"].IsInt())
-        break;
-      timesync_config_.dev_config.config.uart.baudrate =
-          object["baudrate_index"].GetInt();
-
-      if (!object.HasMember("parity_index") || !object["parity_index"].IsInt())
-        break;
-      timesync_config_.dev_config.config.uart.parity =
-          object["parity_index"].GetInt();
-    }
-
-    if (enable_timesync_) {
-      printf("Enable timesync : \n");
-      if (timesync_config_.dev_config.type == kCommDevUart) {
-        printf("Uart[%s],baudrate index[%d],parity index[%d]\n",
-               timesync_config_.dev_config.name,
-               timesync_config_.dev_config.config.uart.baudrate,
-               timesync_config_.dev_config.config.uart.parity);
-      }
-    } else {
-      printf("Disable timesync\n");
-    }
-    return 0;
-  } while (0);
-
-  return -1;
-}
 
 /** Config file process */
 int LdsLidar::ParseConfigFile(const char *pathname) {
@@ -731,75 +660,68 @@ int LdsLidar::ParseConfigFile(const char *pathname) {
 
   rapidjson::Document doc;
   if (!doc.ParseStream(config_file).HasParseError()) {
-    if (doc.HasMember("lidar_config") && doc["lidar_config"].IsArray()) {
-      const rapidjson::Value &array = doc["lidar_config"];
-      size_t len = array.Size();
-      for (size_t i = 0; i < len; i++) {
-        const rapidjson::Value &object = array[i];
-        if (object.IsObject()) {
-          UserRawConfig config = {0};
-          memset(&config, 0, sizeof(config));
-          if (object.HasMember("broadcast_code") &&
-              object["broadcast_code"].IsString()) {
-            std::string broadcast_code = object["broadcast_code"].GetString();
-            std::strncpy(config.broadcast_code, broadcast_code.c_str(),
-                         sizeof(config.broadcast_code));
-          } else {
-            printf("User config file parse error\n");
-            continue;
-          }
+      if (doc.HasMember("lidar_config") && doc["lidar_config"].IsArray()) {
+          const rapidjson::Value& array = doc["lidar_config"];
+          size_t len = array.Size();
+          for (size_t i = 0; i < len; i++) {
+              const rapidjson::Value& object = array[i];
+              if (object.IsObject()) {
+                  UserRawConfig config = { 0 };
+                  memset(&config, 0, sizeof(config));
+                  if (object.HasMember("broadcast_code") &&
+                      object["broadcast_code"].IsString()) {
+                      std::string broadcast_code = object["broadcast_code"].GetString();
+                      std::strncpy(config.broadcast_code, broadcast_code.c_str(),
+                          sizeof(config.broadcast_code));
+                  }
+                  else {
+                      printf("User config file parse error\n");
+                      continue;
+                  }
 
-          if (object.HasMember("enable_connect") &&
-              object["enable_connect"].IsBool()) {
-            config.enable_connect = object["enable_connect"].GetBool();
-          }
-          if (object.HasMember("enable_fan") && object["enable_fan"].IsBool()) {
-            config.enable_fan = object["enable_fan"].GetBool();
-          }
-          if (object.HasMember("return_mode") &&
-              object["return_mode"].IsInt()) {
-            config.return_mode = object["return_mode"].GetInt();
-          }
-          if (object.HasMember("coordinate") && object["coordinate"].IsInt()) {
-            config.coordinate = object["coordinate"].GetInt();
-          }
-          if (object.HasMember("imu_rate") && object["imu_rate"].IsInt()) {
-            config.imu_rate = object["imu_rate"].GetInt();
-          }
-          if (object.HasMember("extrinsic_parameter_source") &&
-              object["extrinsic_parameter_source"].IsInt()) {
-            config.extrinsic_parameter_source =
-                object["extrinsic_parameter_source"].GetInt();
-          }
-          if (object.HasMember("enable_high_sensitivity") &&
-              object["enable_high_sensitivity"].GetBool()) {
-            config.enable_high_sensitivity =
-                object["enable_high_sensitivity"].GetBool();
-          }
+                  if (object.HasMember("enable_connect") &&
+                      object["enable_connect"].IsBool()) {
+                      config.enable_connect = object["enable_connect"].GetBool();
+                  }
+                  if (object.HasMember("enable_fan") && object["enable_fan"].IsBool()) {
+                      config.enable_fan = object["enable_fan"].GetBool();
+                  }
+                  if (object.HasMember("return_mode") &&
+                      object["return_mode"].IsInt()) {
+                      config.return_mode = object["return_mode"].GetInt();
+                  }
+                  if (object.HasMember("coordinate") && object["coordinate"].IsInt()) {
+                      config.coordinate = object["coordinate"].GetInt();
+                  }
+                  if (object.HasMember("imu_rate") && object["imu_rate"].IsInt()) {
+                      config.imu_rate = object["imu_rate"].GetInt();
+                  }
+                  if (object.HasMember("extrinsic_parameter_source") &&
+                      object["extrinsic_parameter_source"].IsInt()) {
+                      config.extrinsic_parameter_source =
+                          object["extrinsic_parameter_source"].GetInt();
+                  }
+                  if (object.HasMember("enable_high_sensitivity") &&
+                      object["enable_high_sensitivity"].GetBool()) {
+                      config.enable_high_sensitivity =
+                          object["enable_high_sensitivity"].GetBool();
+                  }
 
-          printf("broadcast code[%s] : %d %d %d %d %d %d\n",
-                 config.broadcast_code, config.enable_connect,
-                 config.enable_fan, config.return_mode, config.coordinate,
-                 config.imu_rate, config.extrinsic_parameter_source);
-          if (config.enable_connect) {
-            if (!AddBroadcastCodeToWhitelist(config.broadcast_code)) {
-              if (AddRawUserConfig(config)) {
-                printf("Raw config is already exist : %s \n",
-                       config.broadcast_code);
+                  printf("broadcast code[%s] : %d %d %d %d %d %d\n",
+                      config.broadcast_code, config.enable_connect,
+                      config.enable_fan, config.return_mode, config.coordinate,
+                      config.imu_rate, config.extrinsic_parameter_source);
+                  if (config.enable_connect) {
+                      if (!AddBroadcastCodeToWhitelist(config.broadcast_code)) {
+                          if (AddRawUserConfig(config)) {
+                              printf("Raw config is already exist : %s \n",
+                                  config.broadcast_code);
+                          }
+                      }
+                  }
               }
-            }
           }
-        }
       }
-    }
-
-    if (ParseTimesyncConfig(doc)) {
-      printf("Parse timesync config fail\n");
-      enable_timesync_ = false;
-    }
-  } else {
-    printf("User config file parse error[%d]\n",
-           doc.ParseStream(config_file).HasParseError());
   }
 
   std::fclose(raw_file);

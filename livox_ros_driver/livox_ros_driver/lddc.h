@@ -25,7 +25,7 @@
 #define LIVOX_ROS_DRIVER_LDDC_H_
 
 #include "lds.h"
-#include "livox_sdk.h"
+#include "C:\Users\VTC1911-IPK\Documents\workspaces\livox_ws\ws_livox\src\Livox-SDK\sdk_core\include\livox_sdk.h"
 
 #include <ros/ros.h>
 #include <rosbag/bag.h>

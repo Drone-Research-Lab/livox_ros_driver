@@ -48,11 +48,13 @@ generate_messages(DEPENDENCIES
 	)
 
 find_package(PkgConfig)
-pkg_check_modules(APR apr-1)
-if (APR_FOUND)
-	message(${APR_INCLUDE_DIRS})
-	message(${APR_LIBRARIES})
-endif (APR_FOUND)
+
+
+set(APR_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../Livox-SDK/third_party/apr/include)
+set(APR_LIBRARIES ${CMAKE_CURRENT_SOURCE_DIR}/../Livox-SDK/third_party/apr/lib/libapr-1.lib)
+set(APR_FOUND "YES")
+
+
 
 ###################################
 ## catkin specific configuration ##
@@ -83,7 +85,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 ## make sure the livox_sdk_static library is installed
-find_library(LIVOX_SDK_LIBRARY liblivox_sdk_static.a /usr/local/lib)
+find_library(LIVOX_SDK_LIBRARY livox_sdk_static.lib ${CMAKE_CURRENT_SOURCE_DIR}/../Livox-SDK/build/sdk_core/Release)
 
 if((NOT LIVOX_SDK_LIBRARY) OR (NOT EXISTS ${LIVOX_SDK_LIBRARY}))
 	# couldn't find the livox sdk library
@@ -166,11 +168,8 @@ target_sources(${PROJECT_NAME}_node
 	livox_ros_driver/lds_hub.cpp
 	livox_ros_driver/lddc.cpp
 	livox_ros_driver/livox_ros_driver.cpp
-	timesync/timesync.cpp
-	timesync/user_uart/user_uart.cpp
 	common/comm/comm_protocol.cpp
 	common/comm/sdk_protocol.cpp
-	common/comm/gps_protocol.cpp
 	)
 
 #---------------------------------------------------------------------------------------
@@ -185,8 +184,6 @@ target_include_directories(${PROJECT_NAME}_node
     common/rapidjson
     comon/rapdidxml
     common/comm
-    timesync
-    timesync/user_uart
     livox_ros_driver
     )
 
@@ -194,7 +191,7 @@ target_include_directories(${PROJECT_NAME}_node
 # link libraries
 #---------------------------------------------------------------------------------------
 target_link_libraries(${PROJECT_NAME}_node
-	livox_sdk_static.a
+	${LIVOX_SDK_LIBRARY}
 	${Boost_LIBRARY}
 	${catkin_LIBRARIES}
 	${PCL_LIBRARIES}
@@ -219,5 +216,3 @@ install(DIRECTORY launch/
 #---------------------------------------------------------------------------------------
 # end of CMakeList.txt
 #---------------------------------------------------------------------------------------
-
-
