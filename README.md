@@ -24,7 +24,11 @@ For ROS installation, please refer to the ROS installation for Windows guide :
 
 &ensp;&ensp;&ensp;&ensp;(1) Be sure to install the full version of ROS (ros-melodic-desktop-full);
 
-&ensp;&ensp;&ensp;&ensp;(2) There are 7 to 8 steps in ROS installation, please read the installation guide in detail;
+&ensp;&ensp;&ensp;&ensp;(2) If the ROS installtion is giving a lot of errors, try updating your powershell to a newer version;
+
+&ensp;&ensp;&ensp;&ensp;(3) There are 7 to 8 steps in ROS installation, please read the installation guide in detail;
+
+From now on **Use only the ROS terminal** like shown in the ROS Windows isntallation. This is important since we need to install the next comple of things so ROS can find the packages. 
 
 ### 1.1 PCL and VTK installation
 Usually VTK is install with ROS on ubuntu. but thats not the case on Windows so we need to install it.
