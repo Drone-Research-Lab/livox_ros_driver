@@ -1,7 +1,7 @@
 # Livox ROS Driver For Windows
 This package allow you to connect to the livox-mid-40 with ROS Melodic on Windows like you would with the [ubuntu version of this package](https://github.com/Livox-SDK/livox_ros_driver).
 
-**Disclimber this package have only been tested on ros melodic isntalled on windows 10 and the livox-mid-40. The livox hub have not been tested.**
+**Disclaimer this package have only been tested on ros melodic isntalled on windows 10 and the livox-mid-40. The livox hub have not been tested.**
 
 There are a lot more steps to install everything for Windows than ubuntu. But if you want to make the livox laser scanner work on windows this is a package that could help you.
 
