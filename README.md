@@ -57,7 +57,7 @@ src
 
 **Make sure that you install the Livox-SDK with 64-bit support**
 
-Download or clone [Livox-SDK](https://github.com/Livox-SDK/Livox-SDK) from Github to local;
+Download or clone [Livox-SDK](https://github.com/Livox-SDK/Livox-SDK/releases/tag/v2.2.0) from Github to local;
 
 Building the Livox-SDK on windows can be a bit tricky so here is a short guide to how i did it:
 
